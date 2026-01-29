@@ -1,8 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Public Page</title>
+  <style>
+    button {
+      padding: 10px 18px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      color: #555;
+    }
+  </style>
+</head>
 <body>
-	<h1>This is Public Page</h1>
-  <p><a href="https://snippix.only.sap/snippets/922172.html">Redirect to Private IP (Snippix Page)</a></p>
-	<p><a href="http://localhost:4500">Redirect to Localhost:4500</a></p>
+
+  <h1>This is Public Page</h1>
+
+  <button onclick="delayedRedirect('https://snippix.only.sap/snippets/922172.html')">
+    Go to Private IP (Snippix)
+  </button>
+
+  <button onclick="delayedRedirect('http://localhost:4500')">
+    Go to Localhost:4500
+  </button>
+
+  <div id="status"></div>
+
+  <script>
+    let timer;
+
+    function delayedRedirect(url) {
+      let seconds = 7;
+      const status = document.getElementById("status");
+
+      clearInterval(timer);
+      status.textContent = `Redirecting in ${seconds} seconds...`;
+
+      timer = setInterval(() => {
+        seconds--;
+        status.textContent = `Redirecting in ${seconds} seconds...`;
+
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.location.href = url; // client-side redirect
+        }
+      }, 1000);
+    }
+  </script>
+
 </body>
 </html>
