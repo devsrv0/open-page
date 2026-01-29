@@ -1,53 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Public Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #fafafa;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
     button {
-      padding: 10px 18px;
-      margin: 10px;
+      padding: 12px 20px;
+      margin: 10px 10px 10px 0;
       font-size: 16px;
       cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      background: #1976d2;
+      color: white;
     }
+
+    button:hover {
+      background: #125ea9;
+    }
+
     #status {
-      margin-top: 20px;
-      font-family: Arial, sans-serif;
-      color: #555;
+      margin-top: 25px;
+      font-size: 15px;
+      color: #444;
+    }
+
+    .indicator {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e3f2fd;
+      color: #0d47a1;
+      border-left: 4px solid #1976d2;
+      display: none;
     }
   </style>
 </head>
+
 <body>
 
   <h1>This is Public Page</h1>
 
-  <button onclick="delayedRedirect('https://snippix.only.sap/snippets/922172.html')">
-    Go to Private IP (Snippix)
+  <button onclick="startRedirect('https://snippix.only.sap/snippets/922172.html')">
+    Redirect to Private IP (Snippix Page)
   </button>
 
-  <button onclick="delayedRedirect('http://localhost:4500')">
-    Go to Localhost:4500
+  <button onclick="startRedirect('http://localhost:4500')">
+    Redirect to Localhost :4500
   </button>
 
   <div id="status"></div>
 
-  <script>
-    let timer;
+  <div id="indicator" class="indicator">
+    🔁 You will be redirected from the private page
+  </div>
 
-    function delayedRedirect(url) {
+  <script>
+    let countdownTimer;
+
+    function startRedirect(targetUrl) {
       let seconds = 7;
       const status = document.getElementById("status");
+      const indicator = document.getElementById("indicator");
 
-      clearInterval(timer);
+      clearInterval(countdownTimer);
+
+      indicator.style.display = "block";
       status.textContent = `Redirecting in ${seconds} seconds...`;
 
-      timer = setInterval(() => {
+      countdownTimer = setInterval(() => {
         seconds--;
         status.textContent = `Redirecting in ${seconds} seconds...`;
 
         if (seconds <= 0) {
-          clearInterval(timer);
-          window.location.href = url; // client-side redirect
+          clearInterval(countdownTimer);
+
+          const redirectUrl =
+            targetUrl +
+            (targetUrl.includes("?") ? "&" : "?") +
+            "redirectedFrom=public";
+
+          window.location.replace(redirectUrl);
         }
       }, 1000);
     }
